@@ -22,7 +22,13 @@ const CreateEmployee = () => {
   const { register, handleSubmit, control } = useForm();
 
   const saveEmployee = (data) => {
-    dispatch(addEmployee(data));
+    // Before sending the data to Redux, convert dateOfBirth and startDate into strings in ISO format using .toISOString(). This ensures that the dates will be serializable in the Redux state.
+    const formattedData = {
+      ...data,
+      dateOfBirth: data.dateOfBirth ? data.dateOfBirth.toISOString() : null,
+      startDate: data.startDate ? data.startDate.toISOString() : null,
+    };
+    dispatch(addEmployee(formattedData)); //sending formatted data (with the converted dates) to the addEmployee action.
     setModalIsOpen(!modalIsOpen);
   };
 
