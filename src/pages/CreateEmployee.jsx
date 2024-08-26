@@ -9,34 +9,23 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import dayjs from 'dayjs';
 
-import Modal from '../components/Modal';
+// import Modal from '../components/Modal';
+import { Modal } from 'react-modal-jeromebrd/dist/Modal';
+
+import { useDispatch } from 'react-redux';
+import { addEmployee } from '../features/slices/employee';
 
 const CreateEmployee = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  // Initialiser useForm hook
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm();
+  const dispatch = useDispatch();
 
-  // Fonction pour sauvegarder l'employé dans localStorage
+  const { register, handleSubmit, control } = useForm();
+
   const saveEmployee = (data) => {
-    // Récupérer les employés existants dans le localStorage
-    const employees = JSON.parse(localStorage.getItem('employees')) || [];
-
-    // Ajouter les nouvelles données d'employé
-    employees.push(data);
-
-    // Sauvegarder les employés mis à jour dans le localStorage
-    localStorage.setItem('employees', JSON.stringify(employees));
-
-    // Afficher confirmation
+    dispatch(addEmployee(data));
     setModalIsOpen(!modalIsOpen);
   };
 
-  // Ferme la modale
   const handleCloseModal = () => setModalIsOpen(!modalIsOpen);
 
   return (
@@ -50,25 +39,20 @@ const CreateEmployee = () => {
         <form
           onSubmit={handleSubmit(saveEmployee)}
           id="create-employee"
-          className={'my-10 flex flex-col  justify-center w-1/2'}
+          className={
+            'my-10 flex flex-col  justify-center w-full md:w-1/2 xl:w-1/3 '
+          }
         >
-          {/* First Name */}
+          {/* Form fields */}
           <label htmlFor="first-name" className={'mt-2'}>
             First Name
           </label>
           <input
             type="text"
             id="first-name"
-            className={'border border-gray-300 rounded'}
+            className={'border border-gray-300 rounded pl-2'}
             {...register('firstName', { required: false })}
           />
-          {errors.firstName && (
-            <span className={'text-red-500 font-light text-sm'}>
-              First Name is required
-            </span>
-          )}
-
-          {/* Last Name */}
           <label htmlFor="last-name" className={'mt-2'}>
             Last Name
           </label>
@@ -76,15 +60,8 @@ const CreateEmployee = () => {
             type="text"
             id="last-name"
             {...register('lastName', { required: false })}
-            className={'border border-gray-300 rounded'}
+            className={'border border-gray-300 rounded pl-2'}
           />
-          {errors.lastName && (
-            <span className={'text-red-500 font-light text-sm'}>
-              Last Name is required
-            </span>
-          )}
-
-          {/* Date of Birth */}
           <label htmlFor="date-of-birth" className={'mt-2'}>
             Date of Birth
           </label>
@@ -94,21 +71,13 @@ const CreateEmployee = () => {
               control={control}
               render={({ field }) => (
                 <DatePicker
-                  value={field.value}
+                  value={field.value || null}
                   onChange={(newValue) => field.onChange(newValue)}
                   renderInput={(params) => <TextField {...params} />}
                 />
               )}
             />
           </LocalizationProvider>
-
-          {errors.dateOfBirth && (
-            <span className={'text-red-500 font-light text-sm'}>
-              Date of Birth is required
-            </span>
-          )}
-
-          {/* Start Date */}
           <label htmlFor="start-date" className={'mt-2'}>
             Start Date
           </label>
@@ -118,40 +87,26 @@ const CreateEmployee = () => {
               control={control}
               render={({ field }) => (
                 <DatePicker
-                  value={field.value}
+                  value={field.value || null}
                   onChange={(newValue) => field.onChange(newValue)}
                   renderInput={(params) => <TextField {...params} />}
                 />
               )}
             />
           </LocalizationProvider>
-          {errors.startDate && (
-            <span className={'text-red-500 font-light text-sm'}>
-              Start Date is required
-            </span>
-          )}
-
-          {/* Address */}
           <fieldset
-            className={'flex flex-col border border-gray-800 p-5 rounded mt-2'}
+            className={
+              'flex flex-col border w-full border-gray-800 p-5 rounded mt-2'
+            }
           >
             <legend>Address</legend>
-
-            {/* Street */}
             <label htmlFor="street">Street</label>
             <input
               type="text"
               id="street"
               {...register('street', { required: false })}
-              className={'border border-gray-300 rounded'}
+              className={'border border-gray-300 rounded pl-2'}
             />
-            {errors.street && (
-              <span className={'text-red-500 font-light text-sm'}>
-                Street is required
-              </span>
-            )}
-
-            {/* City */}
             <label htmlFor="city" className="mt-2">
               City
             </label>
@@ -159,15 +114,8 @@ const CreateEmployee = () => {
               type="text"
               id="city"
               {...register('city', { required: false })}
-              className={'border border-gray-300 rounded'}
+              className={'border border-gray-300 rounded pl-2'}
             />
-            {errors.city && (
-              <span className={'text-red-500 font-light text-sm'}>
-                City is required
-              </span>
-            )}
-
-            {/* State */}
             <label htmlFor="state" className="mt-2">
               State
             </label>
@@ -183,13 +131,6 @@ const CreateEmployee = () => {
                 </option>
               ))}
             </select>
-            {errors.state && (
-              <span className={'text-red-500 font-light text-sm'}>
-                State is required
-              </span>
-            )}
-
-            {/* Zip Code */}
             <label htmlFor="zip-code" className="mt-2 mb-2">
               Zip Code
             </label>
@@ -199,14 +140,7 @@ const CreateEmployee = () => {
               {...register('zipCode', { required: false })}
               className={'border border-gray-300 rounded'}
             />
-            {errors.zipCode && (
-              <span className={'text-red-500 font-light text-sm'}>
-                Zip Code is required
-              </span>
-            )}
           </fieldset>
-
-          {/* Department */}
           <label htmlFor="department" className={'mt-2'}>
             Department
           </label>
@@ -221,23 +155,18 @@ const CreateEmployee = () => {
             <option value="Human Resources">Human Resources</option>
             <option value="Legal">Legal</option>
           </select>
-          {errors.department && (
-            <span className={'text-red-500 font-light text-sm'}>
-              Department is required
-            </span>
-          )}
-
-          {/* Submit Button */}
           <button
             type="submit"
             className={
-              'mt-5 w-[200px] mx-auto p-2 border border-indigo-800 rounded font-semibold bg-indigo-800 text-white hover:text-indigo-800 hover:bg-white transition-all transition-150ms'
+              'mt-5 w-[200px] mx-auto p-2 border border-blue-800 rounded font-semibold bg-blue-800 text-white hover:text-blue-800 hover:bg-white transition-all transition-150ms'
             }
           >
             Save
           </button>
         </form>
-        {modalIsOpen && <Modal onClose={handleCloseModal} />}
+        {modalIsOpen && (
+          <Modal onClose={handleCloseModal}>Employee Created!</Modal>
+        )}
       </div>
     </main>
   );
