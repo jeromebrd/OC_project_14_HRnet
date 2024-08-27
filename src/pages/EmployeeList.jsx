@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
-import DataTable from 'react-data-table-component';
+import { lazy, Suspense, useState } from 'react';
+// import DataTable from 'react-data-table-component';
 import dayjs from 'dayjs';
+
+const DataTable = lazy(() => import('react-data-table-component'));
 
 const EmployeeList = () => {
   const [search, setSearch] = useState('');
@@ -82,14 +84,16 @@ const EmployeeList = () => {
           className="mb-4 p-2 border rounded"
         />
       </div>
-      <DataTable
-        columns={columns}
-        data={filteredEmployees} // Les données filtrées du store Redux
-        pagination
-        highlightOnHover
-        responsive
-        noDataComponent={'No employees found'}
-      />
+      <Suspense fallback={<div>Loading..</div>}>
+        <DataTable
+          columns={columns}
+          data={filteredEmployees} // Les données filtrées du store Redux
+          pagination
+          highlightOnHover
+          responsive
+          noDataComponent={'No employees found'}
+        />
+      </Suspense>
       <div className="flex justify-center">
         <NavLink to={'/'} className={'underline font-bold py-5 text-xl'}>
           Home

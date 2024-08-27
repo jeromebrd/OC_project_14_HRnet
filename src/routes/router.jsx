@@ -11,4 +11,8 @@ export const router = createBrowserRouter([
     path: 'list',
     element: <EmployeeList />,
   },
+  {
+    path: '*',
+    element: <CreateEmployee />,
+  },
 ]);
