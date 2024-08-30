@@ -1,9 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
-import { Modal } from 'react-modal-jeromebrd/dist/Modal';
+import { useState, lazy, Suspense } from 'react';
+import { Modal } from 'react-modal-jeromebrd';
 import { useDispatch } from 'react-redux';
 import { addEmployee } from '../features/slices/employee';
-import FormEmployee from '../components/FormEmployee';
+// import FormEmployee from '../components/FormEmployee';
+
+const FormEmployee = lazy(() => import('../components/FormEmployee'));
 
 const CreateEmployee = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -30,7 +32,9 @@ const CreateEmployee = () => {
           View Current Employees
         </NavLink>
         <h2 className={'text-xl font-bold'}>Create Employee</h2>
-        <FormEmployee onSubmit={saveEmployee} />
+        <Suspense fallback={<div>Loading..</div>}>
+          <FormEmployee onSubmit={saveEmployee} />
+        </Suspense>
         {modalIsOpen && (
           <Modal onClose={handleCloseModal}>Employee Created!</Modal>
         )}
