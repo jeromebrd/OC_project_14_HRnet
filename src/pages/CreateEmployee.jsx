@@ -36,7 +36,9 @@ const CreateEmployee = () => {
           <FormEmployee onSubmit={saveEmployee} />
         </Suspense>
         {modalIsOpen && (
-          <Modal onClose={handleCloseModal}>Employee Created!</Modal>
+          <Modal onClose={handleCloseModal}>
+            <p>Employee Created!</p>
+          </Modal>
         )}
       </div>
     </main>

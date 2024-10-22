@@ -2,11 +2,13 @@ import PropTypes from 'prop-types';
 const Modal = ({ onClose, children }) => {
   return (
     <div
+      onClick={onClose}
       className={
         'bg-black bg-opacity-50 fixed top-0 left-0 h-[100vh] w-full flex items-center justify-center rounded-md'
       }
     >
       <div
+        onClick={(e) => e.stopPropagation()}
         id="confirmation"
         className={`bg-white text-center px-5 py-20 relative rounded-md w-[90%] sm:max-w-[500px]`}
       >

@@ -66,12 +66,27 @@ const EmployeeList = () => {
     },
   ];
 
-  const filteredEmployees = employees.filter(
-    (employee) =>
+  const filteredEmployees = employees.filter((employee) => {
+    const formattedStartDate = employee.startDate
+      ? dayjs(employee.startDate).format('YYYY-MM-DD')
+      : 'N/A';
+    const formattedDateOfBirth = employee.dateOfBirth
+      ? dayjs(employee.dateOfBirth).format('YYYY-MM-DD')
+      : 'N/A';
+    return (
       employee.firstName.toLowerCase().includes(search.toLowerCase()) ||
       employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      employee.department.toLowerCase().includes(search.toLowerCase())
-  );
+      employee.department.toLowerCase().includes(search.toLowerCase()) ||
+      formattedStartDate.includes(search) ||
+      formattedDateOfBirth.includes(search) ||
+      employee.street.toLowerCase().includes(search.toLowerCase()) ||
+      employee.city.toLowerCase().includes(search.toLowerCase()) ||
+      employee.state.toLowerCase().includes(search.toLowerCase()) ||
+      employee.zipCode.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+  console.log(filteredEmployees);
+  console.log(search);
   return (
     <section className="w-[80%] mx-auto py-10">
       <h1 className="text-center font-bold text-2xl ">Current Employees</h1>
